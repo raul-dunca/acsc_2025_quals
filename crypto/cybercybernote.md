@@ -1,5 +1,3 @@
-<img src="https://github.com/raul-dunca/acsc_2025_quals/blob/main/.assets/cybercybernote.png">
-
 A web application was given, and since this is a crypto challenge the interesting part is:
 
 ```python
