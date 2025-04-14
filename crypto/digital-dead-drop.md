@@ -2,7 +2,7 @@ The given application contains a subtle vulnerability: it is susceptible to a pa
 
 <img src="https://github.com/raul-dunca/acsc_2025_quals/blob/main/.assets/digital-dead-drop.png">
 
-It is known that the encrypted message (the token) is 12 bytes. So the second block c2 has 4 bytes of data, and 4 bytes are 0x04 (from PKCS#7 padding). I will denote the decrypted ciphertext as x. So in this case, I can find x[4..7] by calculating `x[i]=c1[i]^0x04`. Next I can try to modify c1 so it uses a padding of 5, so it will look something like `abc55555`, where abc are 3 arbitrary bytes. Thus, it is possible to find x[3] by first calculating the correct c1[4…7] where:
+It is known that the encrypted message (the token) is 12 bytes. So the second block c2 has 4 bytes of data, and 4 bytes are 0x04 (from PKCS#7 padding). I will denote the decrypted ciphertext as x. So in this case, I can find x[4..7] by calculating `x[i]=c1[i]^0x04`. Next I can try to modify c1 so it uses a padding of 5, it will look something like `abc55555`, where abc are 3 arbitrary bytes. Thus, it is possible to find x[3] by first calculating the correct c1[4…7] where:
 
 ```txt
 c1[i]=x[i]^0x05
@@ -11,10 +11,10 @@ c1[i]=x[i]^0x05
 And then I can try all possible bytes values for c1[3] and only for 1 value the padding will be correct (there exists 1 value for c1[3] such that c1[3]^x[3]=0x05). Now it is known that x[3]=c1[3]^0x05. The same logic can be applied further for the rest of x. Once x is calculated, the plaintext (p2) can be computed as: 
 
 ```txt
-p2[i]=x[i]^x1[i]
+p2[i]=x[i]^c1[i]
 ```
 
-For the first block, the same logic can be applied, the only difference is that the (initialization vector) iv must be used instead of c1 and that you  must not send c2 in the code when checking the padding, otherwise the padding won't affect the first block.
+For the first block, the same logic can be applied, the only differences are that the (initialization vector) iv must be used instead of c1, all 8 bytes must be calculated since c1 has no padding and that you must not send c2 in the code when checking the padding, otherwise the padding won't affect the first block.
 
 Here is my final solution script:
 
