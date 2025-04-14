@@ -1,18 +1,22 @@
-The given application contains a subtle vulnerability: it is susceptible to a padding oracle attack. [https://www.nccgroup.com/us/research-blog/cryptopals-exploiting-cbc-padding-oracles/](Here) is a very detailed explenation of how the attack works. In summary, since the application returns an error when the PKCS#7 padding is incorrect, and due to the way AES in CBC mode operates, it's possible to decrypt messages without actually knowing the key. First lets try to find P2:
+The given application contains a subtle vulnerability: it is susceptible to a padding oracle attack. [Here](https://www.nccgroup.com/us/research-blog/cryptopals-exploiting-cbc-padding-oracles/) is a very detailed explenation of how the attack works. In summary, since the application returns an error when the PKCS#7 padding is incorrect, and due to the way AES in CBC mode operates, it's possible to decrypt messages without actually knowing the key. First lets try to find p2 (plaintext block 2):
 
 <img src="https://github.com/raul-dunca/acsc_2025_quals/blob/main/.assets/digital-dead-drop.png">
 
-It is known that the message encrypted (the token) is 12 bytes. So the second block c2 has 4 bytes of data and 4 bytes are 0x04 (from PKCS#7 padding). I will denote the decrypted ciphertext as x. So in this case, I can find x[4..7] by calculating `x[i]=c1[i]^0x04`. Next I can try to modify c1 so it uses a padding of 5, so it will look something like `abc55555`, where abc are 3 arbitrarry bytes. Thus it is possible to find x[3] by firstly calculating the correct c1[4…7] where:
+It is known that the encrypted message (the token) is 12 bytes. So the second block c2 has 4 bytes of data and 4 bytes are 0x04 (from PKCS#7 padding). I will denote the decrypted ciphertext as x. So in this case, I can find x[4..7] by calculating `x[i]=c1[i]^0x04`. Next I can try to modify c1 so it uses a padding of 5, so it will look something like `abc55555`, where abc are 3 arbitrarry bytes. Thus it is possible to find x[3] by firstly calculating the correct c1[4…7] where:
 
 ```txt
 c1[i]=x[i]^0x05
 ```
 
-And then I tried all possible bytes values for c1[3] and only for 1 values the padding is correct (aka. There exists 1 value for c1[3] such that c1[3]^x[3]=0x05). Now it is know that x[3]=c1[3]^0x05. The same logic can be applied further for the rest of x. Once x is calculated the plaintest (p2) can be calculates as: p2[i]=x[i]^x1[i].
+And then I can try all possible bytes values for c1[3] and only for 1 values the padding will be correct (there exists 1 value for c1[3] such that c1[3]^x[3]=0x05). Now it is know that x[3]=c1[3]^0x05. The same logic can be applied further for the rest of x. Once x is calculated the plaintext (p2) can be calculates as: 
 
-For the first block the same logic can be applied the only difference is that I use iv instead of c1 and that I don’t send c2 in the code, otherwise the padding wont affect the first block.
+```txt
+p2[i]=x[i]^x1[i]
+```
 
-Here is the final solution script:
+For the first block the same logic can be applied the only difference is that the (initialization vector) iv mus tbe used instead of c1 and that you  must not send c2 in the code when checking the padding, otherwise the padding wont affect the first block.
+
+Here is my final solution script:
 
 ```python
 from pwn import *
