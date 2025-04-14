@@ -14,7 +14,7 @@ And then I can try all possible bytes values for c1[3] and only for 1 value the 
 p2[i]=x[i]^c1[i]
 ```
 
-For the first block, the same logic can be applied, the only differences are that the (initialization vector) iv must be used instead of c1, all 8 bytes must be calculated since c1 has no padding and that you must not send c2 in the code when checking the padding, otherwise the padding won't affect the first block.
+For the first block, the same logic can be applied, the only differences are that the (initialization vector) iv must be used instead of c1, all 8 bytes must be calculated since c1 has no padding and that you must not send c2 in the code when checking the padding, otherwise the padding won't affect the first block and no errors will be shown.
 
 Here is my final solution script:
 
