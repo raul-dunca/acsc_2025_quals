@@ -13,7 +13,6 @@ payload_hex = ''.join([extract_payload(line) for line in data_lines])
 
 # skip the first 5 bytes, which usually contain header data in payload
 bitmap_hex_data = payload_hex[10:]
-
 bitmap_bin_data = bin(int(bitmap_hex_data, 16))[2:]
 
 width_pixels = 72
