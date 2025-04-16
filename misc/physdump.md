@@ -1,4 +1,6 @@
-Given that the Windows OS was provided in the challenge description and because a physical memory dump was included, I was quite sure I had to use volatility. Furthermore, I used [volatility3](https://github.com/volatilityfoundation/volatility3), since volatility2 supports only some memory images and `Windwos 10 22H2 ()` was not one of them. Running volatility3 on the given physical memory dump will not work because volatility expects the dump to start at 0x0, but as specified in the description: “The guest OS physical memory was mapped @ 0x100000”. As a result, I had to fill the memory from 0x0 to 0x100000 with null bytes:
+Given that the Windows OS was provided in the challenge description and because a physical memory dump was included, I was quite sure I had to use volatility. Furthermore, I used [volatility3](https://github.com/volatilityfoundation/volatility3), since volatility2 supports only some memory images and `Windwos 10 22H2 ()` was not one of them. 
+
+Running volatility3 on the given physical memory dump will not work because volatility expects the dump to start at 0x0, but as specified in the description: “The guest OS physical memory was mapped @ 0x100000”. As a result, I had to fill the memory from 0x0 to 0x100000 with null bytes:
 
 ```bash
 dd if=/dev/zero bs=1 count=$((0x100000)) of=padding.bin
