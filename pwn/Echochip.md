@@ -1,4 +1,4 @@
-In this challenge, a format string vulnerability was needed to be exploited to retrieve the flag. The vulnerability was due to: `printf(echo);` where user input is directly used in `printf` as the first parameter (the format string parameter). At first, I thought that I must write the address of the flag on the stack and then use a `%s` specifier to read the string from that address. However, the script that led to the solution was:
+In this challenge, a format string vulnerability was needed to be exploited. The vulnerability was due to: `printf(echo);` where user input is directly used in `printf` as the first parameter (the format string parameter). At first, I thought that I must write the address of the flag on the stack and then use a `%s` specifier to read the string from that address. However, the script that led to the solution was:
 
 ```bash
  for i in $(seq 1 300); do
