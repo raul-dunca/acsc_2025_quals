@@ -1,17 +1,17 @@
-First, I ran the following command to extract the content of the ApplImage:
+First, I ran the following command to extract the content of the AppImage:
 
 ```bash
 7z x neon-cirquit-1.0.0.AppImage
 ```
 
-I figured out this was an Electron app and after some research I discovered [this post](https://cypelf.fr/articles/protonic-vault/) that helped me a lot.
+I figured out this was an Electron app and after some research, I discovered [this post](https://cypelf.fr/articles/protonic-vault/) that helped me a lot.
 In this case `app.asar` was under the `resources` directory. And running:
 
 ```bash
 npx asar extract app.asar app
 ```
 
-I was able to recover the source files. In `index.html` I saw that the script `renderer.js` has the `checkPassword` logic. However, the password is not directly stored in code but it uses:
+I was able to recover the source files. In `index.html` I saw that the script `renderer.js` has the `checkPassword` logic. However, the password is not directly stored in code, but it uses:
 
 ```js
 window.nativeAddon.checkPassword(userInput);
@@ -23,7 +23,7 @@ Looking at `preload.js` I noticed:
 const nativeAddon = require('./native-addon/build/Release/addon.node'); 
 ```
 
-Thus, going to this path `addon.node` was a binary which I decompiled using [dogbolt](https://dogbolt.org/). There I saw the `CheckPassword` function which is quite big but the most important part is near the end and is quite simple (I noticed the bytes and just thinked that maybe this was the password or the flag):
+Thus, going to this path `addon.node` was a binary that I decompiled using [dogbolt](https://dogbolt.org/). There I saw the `CheckPassword` function, which is quite big but the most important part is near the end and is quite simple (I noticed the bytes and just thought that maybe this was the password or the flag):
 
 ```c
 __builtin_memcpy(rax_42, "\x9b\x9e\x9c\x97\xcd\xcf\xcd\xca\x84\x88\xcc\xa0\x9e\x8d\xcc\xa0\xb1\xcc\xa7\xaa\xac\xa0\xcb\xcd\xa0\xce\xcc\xcc\xcb\x82", 0x1e);
@@ -35,7 +35,7 @@ __builtin_memcpy(rax_42, "\x9b\x9e\x9c\x97\xcd\xcf\xcd\xca\x84\x88\xcc\xa0\x9e\x
         } while (s_7 != rax_42);
 ```
 
-Basically it just negates each byte and this is the password so I created a script to decode the password:
+Basically, it just negates each byte, so I created a script to decode the password:
 
 
 ```python
