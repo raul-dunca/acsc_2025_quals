@@ -59,6 +59,6 @@ while true; do
 done
 ```
 
-This is the logic of the binary, which basically decodes the given input using base64 and evaluates the result as a shell command. To execute any command, I had to use the command substitutions syntax like: `$(ls)` (which would get evaluated, and the output will be echoed) and then encode it in base64. Since the flag is in the environment variables, I had to send: `JChlbnYp` (decoded: `$(env)`)
+This is the logic of the binary, which basically decodes the given input using base64 and evaluates the result as a shell command. To execute any instruction, I had to use the command substitutions syntax like: `$(ls)` (which would get evaluated, and the output will be echoed) and then encode it in base64. Since the flag is in the environment variables, I had to send: `JChlbnYp` (decoded: `$(env)`)
 
 `dach2025{3uRorUnNeR5_ARe_NO7_7h3_83S7_2ugmtetxvexn0p0b}`
