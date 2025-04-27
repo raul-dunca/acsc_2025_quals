@@ -1,5 +1,5 @@
 
-This was a ret2win challenge, so the goal was to overwrite the return address of main with the win function. ASLR was not enabled (can be observed that for different crash runs `RIP `stays the same). Using pwngdb and running "info function" I could see:
+This was a ret2win challenge, so the goal was to overwrite the return address of main with the win function. ASLR was not enabled (can be observed that for different crash runs `RIP` stays the same). Using pwngdb and running "info function" I could see:
 
 ```txt
 0x0000000000401216  win
@@ -27,8 +27,8 @@ Which prints 128, and it was necessary to add 8 bytes (the size of `RBP` itself)
 ```python
 from pwn import *
 
-target_host = 'port.dyn.acsc.land'
-target_port =  30647
+target_host = <host>
+target_port =  <port>
 
 win_address = 0x401216
 
