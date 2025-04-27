@@ -20,6 +20,6 @@ for i in range(len(last_part)):
 print("Flag:", "".join(map(chr, decrypted_bytes)))
 ```
 
-A trick done by the author is that they saved a string after the hex encoded flag, and that string is also part of the flag, since the things are stored in continues memory and the `for` exceeds the hex string value. You can see it in my code that's why I do have the `last_part` code.
+A trick done by the author is that they saved a string after the hex encoded flag, and that string is also part of the flag, since the things are stored in continues memory and in code the `for` exceeds the hex string length. You can see it in my code, that's why I have the `last_part` code.
 
 `dach2025{d4mn_@r3_y0u_a_r1pperd0c_or_wh4t!?_67fea21e}`
